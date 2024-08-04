@@ -2,6 +2,8 @@
   hosts: localhost
   vars:
     storage_base_dir: /tmp
+    proxmox_iso_url: https://enterprise.proxmox.com/iso/proxmox-ve_8.2-1.iso
+    proxmox_iso_sha256: d99d182a0df4ba94c27668d3e33d14cc286d775a7bdf571a86c24ea522009e93
   tasks:
     - name: Create storage directories
       ansible.builtin.file:
@@ -9,3 +11,9 @@
       loop:
         - "{{ storage_base_dir }}/config/answers"
         - "{{ storage_base_dir }}/iso"
+    - name: Download Proxmox ISO
+      ansible.builtin.get_url:
+        url: "{{ proxmox_iso_url }}"
+        dest: "{{ storage_base_dir }}/iso"
+        mode: u=rw,go=r
+        checksum: "sha256:{{ proxmox_iso_sha256 }}"
