@@ -27,3 +27,19 @@
           - 8000
         volumes:
           - "{{ storage_base_dir }}/config:/config"
+    - name: Create autoinstall ISO
+      community.docker.docker_container:
+        name: proxmox-autoinstall-iso-builder
+        image: ghcr.io/somanydoors/proxmox-autoinstall-iso-builder
+        state: present
+        auto_remove: true
+        cleanup: true
+        detached: false
+        command:
+          - "prepare-iso"
+          - "/iso/proxmox-ve_8.2-1.iso"
+          - "--fetch-from http"
+          - "--url http://{{ ansible_host_ip }}/answer"
+          - "--output /iso/proxmox-ve_8.2-1-autoinstall.iso"
+        volumes:
+          - "{{ storage_base_dir }}/iso:/iso"
