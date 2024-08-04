@@ -1,0 +1,11 @@
+- name: Prepare Proxmox autoinstall environment
+  hosts: localhost
+  vars:
+    storage_base_dir: /tmp
+  tasks:
+    - name: Create storage directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+      loop:
+        - "{{ storage_base_dir }}/config/answers"
+        - "{{ storage_base_dir }}/iso"
