@@ -17,3 +17,13 @@
         dest: "{{ storage_base_dir }}/iso"
         mode: u=rw,go=r
         checksum: "sha256:{{ proxmox_iso_sha256 }}"
+    - name: Create autoinstall server container
+      community.docker.docker_container:
+        name: proxmox-autoinstall-server
+        image: ghcr.io/somanydoors/proxmox-autoinstall-server
+        state: present
+        detached: true
+        ports:
+          - 8000
+        volumes:
+          - "{{ storage_base_dir }}/config:/config"
